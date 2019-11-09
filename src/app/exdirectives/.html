@@ -1,0 +1,27 @@
+&lt;div class='panel panel-primary'&gt;  
+        &lt;div class='panel-heading'&gt;  
+            {{title}}  
+        &lt;/div&gt;   
+        &lt;div class='panel-body'&gt;  
+            &lt;div class='table-responsive'&gt;  
+                &lt;table class='table'&gt;  
+                    &lt;thead&gt;  
+                        &lt;tr&gt;  
+                            &lt;th&gt;Title&lt;/th&gt;  
+                            &lt;th&gt;Director&lt;/th&gt;  
+                            &lt;th&gt;Cast&lt;/th&gt;  
+                            &lt;th&gt;Release Date&lt;/th&gt;  
+                        &lt;/tr&gt;  
+                    &lt;/thead&gt;  
+                    &lt;tbody&gt;  
+                        &lt;tr *ngFor="let movie of movies;"&gt;  
+                            &lt;td&gt;{{movie.title}}&lt;/td&gt;  
+                            &lt;td&gt;{{movie.director}}&lt;/td&gt;  
+                            &lt;td&gt;{{movie.cast}}&lt;/td&gt;  
+                            &lt;td&gt;{{movie.releaseDate}}&lt;/td&gt;  
+                        &lt;/tr&gt;  
+                    &lt;/tbody&gt;  
+                &lt;/table&gt;  
+            &lt;/div&gt;  
+        &lt;/div&gt;  
+    &lt;/div&gt;  

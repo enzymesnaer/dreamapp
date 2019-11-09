@@ -1,0 +1,203 @@
+<div class="container">
+    <h1 class="text-center">Directives</h1>
+    <p>
+        Directives are used to manipulate the DOM. By using Angular directives, you can change the appearance, behavior
+        or a layout of a DOM element. It also helps you to extend HTML.
+    </p>
+    <p>Directives can be classified in 3 categories based on how they behave:</p>
+    <ul type="circle">
+        <li>Component Directives</li>
+        <li>Structural Directives</li>
+        <li>Attribute Directives</li>
+    </ul>
+    <p><b>Component Directives:</b> Component directives are used in main class. They contain the detail of how the
+        component should be processed, instantiated and used at runtime.</p>
+    <p><b>Structural Directives:</b> Structural directives start with a * sign. These directives are used to manipulate
+        and change the structure of the DOM elements. For example, *ngIf directive, *ngSwitch directive, and *ngFor
+        directive.</p>
+    <ul type="none">
+        <li><b>*ngIf Directive:</b> The ngIf allows us to Add/Remove DOM Element.</li>
+        <li><b>*ngSwitch Directive: </b> The *ngSwitch allows us to Add/Remove DOM Element. It is similar to switch
+            statement of C#.</li>
+        <li><b>*ngFor Directive: </b> The *ngFor directive is used to repeat a portion of HTML template once per each
+            item from an iterable list (Collection).</li>
+    </ul>
+    <p><b>Attribute Directives:</b> Attribute directives are used to change the look and behavior of the DOM elements.
+        For example: ngClass directive, and ngStyle directive etc.</p>
+    <ul type="none">
+        <li><b>ngClass Directive:</b> The ngClass directive is used to add or remove CSS classes to an HTML element.
+        </li>
+        <li><b>ngStyle Directive:</b> The ngStyle directive facilitates you to modify the style of an HTML element using
+            the expression. You can also use ngStyle directive to dynamically change the style of your HTML element.
+        </li>
+    </ul>
+    <hr>
+    <h1>Tryout 1</h1>
+    <h4>ngIf Directive</h4>
+    <p>The ngIf Directives is used to add or remove HTML Elements according to the expression. The expression must
+        return a Boolean value. If the expression is false then the element is removed, otherwise element is inserted.
+    </p>
+    <pre>
+            <b>
+            > component.html
+            </b>
+            &lt;p *ngIf="condition"&gt;  
+            condition is true and ngIf is true.  
+            &lt;/p&gt;  
+            &lt;p *ngIf="!condition"&gt;  
+            condition is false and ngIf is false.  
+            &lt;/p&gt;  
+        </pre>
+    <div class="output">
+        <p *ngIf="condition">
+            condition is true and ngIf is true.
+        </p>
+        <p *ngIf="!condition">
+            condition is false and ngIf is false.
+        </p>
+        <button class="btn btn-dark" (click)="toggle()">toggle</button>
+    </div>
+    <pre>
+            <b>
+            > component.html
+            </b>
+            &lt;div *ngIf="condition; else elseBlock"&gt;  
+            Content to render when condition is true.  
+            &lt;/div&gt;  
+            &lt;ng-template #elseBlock&gt;  
+            Content to render when condition is false.  
+            &lt;/ng-template&gt;  
+            </pre>
+    <div class="output">
+        <div *ngIf="condition; else elseBlock">
+            <p>Content to render when condition is true.</p>
+        </div>
+        <p>
+            <ng-template #elseBlock>
+                Content rendered using ng-template conditional structural directive with reference condition.
+            </ng-template>
+        </p>
+        <button class="btn btn-dark" (click)="toggle()">toggle</button>
+    </div>
+
+    <pre>
+            <b>
+            > component.ts
+            </b>
+            @Component({{'{'}}  
+            selector: 'ng-if-simple',  
+            template: `  
+            &lt;button (click)="show = !show"&gt;{{'{'}}{{'{'}}show ? 'hide' : 'show'{{'}'}}{{'}'}}&lt;/button&gt;  
+            show = {{'{'}}{{'{'}}show{{'}'}}{{'}'}}  
+            &lt;br&gt;  
+            &lt;div *ngIf="show"&gt;Text to show&lt;/div&gt;  
+            `  
+            {{'}'}})  
+            export class NgIfSimple {{'{'}}{{'{'}}  
+            show: boolean = true;  
+            {{'}'}}  
+            </pre>
+    <div class="output">
+        <button class="btn btn-dark" (click)="show = !show">{{show ? 'hide' : 'show'}}</button>
+        show = {{show}}
+        <br>
+        <div *ngIf="show">Text to show</div>
+    </div>
+    <pre>
+            <b>
+            > component.ts
+            </b>
+            @Component({{'{'}}{{'{'}}  
+            selector: 'ng-if-else',  
+            template: `  
+            &lt;button (click)="show = !show"&gt;{{'{'}}{{'{'}}show ? 'hide' : 'show'{{'}'}}{{'}'}}&lt;/button&gt;  
+            show = {{'{'}}{{'{'}}show{{'}'}}{{'}'}}  
+            &lt;br&gt;  
+            &lt;div *ngIf="show; else elseBlock"&gt;Text to show&lt;/div&gt;  
+            &lt;ng-template #elseBlock&gt;Alternate text while primary text is hidden&lt;/ng-template&gt;  
+            `  
+            {{'}'}})  
+            export class NgIfElse {{'{'}}  
+            show: boolean = true;  
+            {{'}'}}  
+            </pre>
+    <div class="output">
+        <button class="btn btn-dark" (click)="show = !show">{{show ? 'hide' : 'show'}}</button>
+        show = {{show}}
+        <br>
+        <div *ngIf="show; else elseBlock">Text to show</div>
+        <ng-template #elseBlock>Alternate text while primary text is hidden rendered using #reference on ng-template
+        </ng-template>
+
+    </div>
+    <hr>
+    <h4>ngFor Directive</h4>
+    <p>
+        The *ngFor directive is used to repeat a portion of HTML template once per each item from an iterable list
+        (Collection).
+    </p>
+    <p><b>Syntax</b></p>
+    <pre>
+
+&lt;li *ngFor="let item of items;"&gt; .... &lt;/li&gt;            
+            </pre>
+    <p><b>How to use ngFor</b></p>
+    <p>To Use ngFor directive, you have to create a block of HTML elements, which can display a single item of the items
+        collection. After that you can use the ngFor directive to tell angular to repeat that block of HTML elements for
+        each item in the list.</p>
+    <p>Example</p>
+    The following Code contains a list of Top 3 movies in a movies array. Let's build a template to display these movies in a tabular form.
+    <pre>
+    <b>> component.ts</b>
+    export class AppComponent   
+    {{'{'}}   
+        title: string ="Top 10 Movies" ;  
+        movies: Movie[] =[  
+            {{'{'}}title:'Zootopia',director:'Byron Howard, Rich Moore',cast:'Idris Elba, Ginnifer Goodwin, Jason Bateman',releaseDate:'March 4, 2016'{{'}'}},  
+            {{'{'}}title:'Batman v Superman: Dawn of Justice',director:'Zack Snyder',cast:'Ben Affleck, Henry Cavill, Amy Adams',releaseDate:'March 25, 2016'{{'}'}},  
+            {{'{'}}title:'Captain America: Civil War',director:'Anthony Russo, Joe Russo',cast:'Scarlett Johansson, Elizabeth Olsen, Chris Evans',releaseDate:'May 6, 2016'{{'}'}},  
+            {{'{'}}title:'X-Men: Apocalypse',director:'Bryan Singer',cast:'Jennifer Lawrence, Olivia Munn, Oscar Isaac',releaseDate:'May 27, 2016'{{'}'}},  
+        ]  
+    {{'}'}}
+
+    class Movie {{'{'}}  
+        title : string;  
+        director : string;  
+        cast : string;  
+        releaseDate : string;  
+    {{'}'}} 
+    </pre>
+    <pre>
+        <b>> component.html</b>
+        &lt;div class='panel panel-primary'&gt;  
+        &lt;div class='panel-heading'&gt;  
+             {{'{'}}{{'{'}}title{{'}'}}{{'}'}}   
+        &lt;/div&gt;  
+         &lt;div class='panel-body'&gt;  
+            &lt;div class='table-responsive'&gt;  
+                &lt;table class='table'&gt;  
+                    &lt;thead&gt;  
+                        &lt;tr&gt;  
+                            &lt;th&gt;Title&lt;/th&gt;  
+                            &lt;th&gt;Director&lt;/th&gt;  
+                            &lt;th&gt;Cast&lt;/th&gt;  
+                            &lt;th&gt;Release Date&lt;/th&gt;  
+                        &lt;/tr&gt;  
+                    &lt;/thead&gt;  
+                    &lt;tbody&gt;  
+                        &lt;tr *ngFor="let movie of movies;"&gt;  
+                            &lt;td&gt;{{'{'}}{{'{'}}movie.title{{'}'}}{{'}'}}&lt;/td&gt;  
+                            &lt;td&gt;{{'{'}}{{'{'}}movie.director{{'}'}}{{'}'}}&lt;/td&gt;  
+                            &lt;td&gt;{{'{'}}{{'{'}}movie.cast{{'}'}}{{'}'}}&lt;/td&gt;  
+                            &lt;td&gt;{{'{'}}{{'{'}}movie.releaseDate{{'}'}}{{'}'}}&lt;/td&gt;  
+                        &lt;/tr&gt;  
+                    &lt;/tbody&gt;  
+                &lt;/table&gt;  
+            &lt;/div&gt;  
+        &lt;/div&gt;  
+    &lt;/div&gt;  
+    </pre> 
+    <div class="output"> 
+
+    </div>
+</div>

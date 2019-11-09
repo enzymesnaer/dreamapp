@@ -1,0 +1,29 @@
+pre{
+    background-color: gainsboro;
+}
+
+*{
+    border-radius: 1%;
+}
+
+code {
+    padding: .2rem .4rem;
+    font-size: 90%;
+    color: #bd4147;
+    background-color: #f7f7f9;
+    border-radius: .25rem;
+}
+
+.output{
+    border:grey 1px solid;
+    padding:10px;
+}
+.output::before {
+    font-size: 13px;
+    font-weight: bolder;
+    color: navy;
+    content: "Output: ";
+    position: absolute;
+    margin-top:-27px;
+    margin-left:-10px;
+  }

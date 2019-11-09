@@ -1,0 +1,709 @@
+<div class="container"><hr>
+    <h1 class="text-center"><b>Data Binding</b></h1>
+    <h1>Tryout 1</h1>
+    <h4>Interpolation {{'{'}}.....{{'}'}} example</h4>
+    <br>
+    <pre>
+><b>component.html</b> 
+{{'{'}}{{'{'}} ( 52 * 8 * 6 + 2 ) {{'}'}}{{'}'}} and
+{{'{'}}{{'{'}} userDefinedVariableValue {{'}'}}{{'}'}}
+    </pre>
+    <div class="output">
+      {{ ( 52 * 8 * 6 + 2 ) }} and <br>
+      {{ userDefinedVariableValue }}
+    </div>
+    <p>
+            Data binding is a technique to link your data to your view layer. By binding a variable you are telling the framework (angular in this case) to watch it for changes. If changes are detected, the framework takes care of updating the view accordingly.
+    </p>
+    <hr>
+    <h4>
+            Using (one-way) data binding in angular
+    </h4>
+    <pre>
+<b>>component.ts</b>
+
+import {{'{'}} Component {{'}'}} from '@angular/core'
+
+@Component({{'{'}}
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+{{'}'}})
+export class AppComponent {{'{'}}
+  name = 'Angular'
+{{'}'}}
+    </pre>
+<pre>
+<b>>component.html</b>
+
+&lt;p&gt;Hello, my name is {{'{'}}{{'{'}} name {{'}'}}{{'}'}}!&lt;/p&gt;
+</pre>
+<div class="output">
+    <p>Hello, my name is {{ name }}!</p>
+</div>
+<hr>
+<h4>Passing bound values as attributes</h4>
+<pre>
+  &lt;input value="{{'{'}}{{'{'}} name {{'}'}}{{'}'}}"/&gt;      
+</pre>
+<div class="output">
+    &lt;input value="{{ name }}" /&gt; <br>      
+</div>
+<hr>
+<p>Until now we only used data-binding to display the values of variables on the view. But what if we want to react to actions dispatched for the user?</p>
+<h4>Binding to events</h4>
+<pre>
+  <b>> component.html</b> 
+
+  &lt;button (click)="onButtonClicked()"&gt;Change Name&lt;/button&gt;
+
+  <b>> component.ts</b>
+  export class AppComponent {{'{'}}
+  name = 'Angular'
+
+  onButtonClicked() {{'{'}}
+  this.name = 'HelloWorld'
+  {{'}'}}
+  {{'}'}}
+
+</pre>
+<div class="output">
+    <button (click)="onButtonClicked()" class="btn btn-success">Change Name</button><br>
+    <span>{{ name }}</span>
+</div>
+<hr>
+<h4>Passing events along</h4>
+<p>
+    In the case of mouse-events (and others), it is often required to receive the original event, to get access to information like the click-location (event data). <br>
+    We can pass the original event to our method by using the special "$event" syntax:
+</p>
+<pre>
+&lt;button (click)="onButtonClicked2($event)"&gt;Check MouseEvent props&lt;/button&gt;&lt;br&gt;
+{{'{'}}{{'{'}} eventLogWhichBtn {{'}'}}{{'}'}} &lt;br&gt;
+{{'{'}}{{'{'}} eventLogCtrlChk {{'}'}}{{'}'}} &lt;br&gt;
+{{'{'}}{{'{'}} eventLogAltChk {{'}'}}{{'}'}} <br>
+<b>>component.ts</b>
+eventLogWhichBtn: any;
+eventLogCtrlChk: any;
+eventLogAltChk: any;
+onButtonClicked2(evt: MouseEvent){{'{'}}
+this.eventLogWhichBtn = evt.which;
+this.eventLogCtrlChk=  evt.ctrlKey;
+this.eventLogAltChk= evt.altKey;
+{{'}'}}
+</pre>
+<div class="output">
+    <button class="btn btn-primary" (click)="onButtonClicked2($event)">Check MouseEvent props</button><br>
+  {{ eventLogWhichBtn }} <br>
+  {{ eventLogCtrlChk }} <br>
+  {{ eventLogAltChk }} 
+</div>
+<hr>
+<h4>Two way data binding</h4>
+<p>With two-way data binding, the framework not only is watching your variables for changes. It also keeps track of changes that are made by the user (for example with input-elements) and updates the view accordingly and vice versa.</p>
+<p>There is one commonly used directive that makes two-way data binding possible. This directive is called ngModel alias bananas in the box syntax</p>
+<p>NgModel is part of the angular "FormsModule" and has to be imported into your module manually.</p>
+<pre>
+import {{'{'}} NgModule {{'}'}} from '@angular/core'
+import {{'{'}} BrowserModule {{'}'}} from '@angular/platform-browser'
+import {{'{'}} FormsModule {{'}'}} from '@angular/forms'
+import {{'{'}} AppComponent {{'}'}} from './app.component'
+
+@NgModule({{'{'}}
+  imports: [BrowserModule, FormsModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+  {{'}'}})
+export class AppModule {{'{'}}{{'}'}}
+</pre>
+<p>NgModel can be used with form-elements like inputs to implement two-way data binding. To do that, we have to use a pretty special syntax: [(ngModel)].</p>
+<pre>
+    &lt;input [(ngModel)]="name" /&gt;
+    Welcome: {{'{'}}{{'{'}} name {{'}'}}{{'}'}}
+</pre>
+<div class="output">
+    <input class="form-control" [(ngModel)]="name" />
+    Welcome: {{ name }}
+</div>
+<p>Using this syntax the value of the variable "name" is not only shown as the value of the input, but both values change when the user types into the input field.</p>
+<p>It is just a prettier version of a normal data-binding to display the value on the screen and an event binding to update the value of the variable. i.e.</p>
+<pre>
+    &lt;input [ngModel]="name" (ngModelChange)="name = $event" /&gt;
+</pre><hr><hr>
+<h1>Tryout 2</h1>
+<p>Declare an array of months in your <b>component.ts</b> class</p>
+<pre>
+months = ["January", "Feburary", "March", "April", "May", 
+                  "June", "July", "August", "September",
+                  "October", "November", "December"];
+</pre>
+<p>
+    For loop is used to iterate over the months’ array, which in turn will create the option tag with the value present in the months. <br>
+    *ngFor is a <b>Structural Directive</b>
+</p>
+<p>
+    The syntax for in Angular is *ngFor = “let i of months” and to get the value of months we are displaying it in {{i}}.
+</p>
+<pre>
+&lt;div> Months :
+    &lt;select&gt;
+        &lt;option *ngFor="let i of months"&gt;{{'{'}}{{'{'}}i{{'}'}}{{'}'}}&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/div&gt;
+</pre>
+<div class="output">
+    <div> Months :
+        <select class="form-control">
+            <option *ngFor="let i of months">{{i}}</option>
+        </select>
+    </div>
+</div>
+<br><hr>
+<h4>Applying conditions using with ng-template and template ref</h4>
+<pre>
+  CASE 1:
+  months = ["January", "February", "March", "April",
+  "May", "June", "July", "August", "September",
+  "October", "November", "December"];
+  isavailable = true;   //variable is set to true
+
+    &lt;div&gt;
+      &lt;span *ngIf = "isavailable"&gt;Condition is valid.&lt;/span&gt; 
+      //over here based on if condition the text condition is valid is displayed. 
+      If the value of isavailable is set to false it will not display the text.
+   &lt;/div&gt;
+   <hr>
+  CASE 2:
+  isavailable = false;
+ 
+  &lt;div&gt;
+      &lt;span *ngIf="isavailable; else condition1"&gt;Condition is valid.&lt;/span&gt;
+      &lt;ng-template #condition1>Condition is invalid&lt;/ng-template&gt;
+  &lt;/div&gt;
+      <hr>
+  CASE 3:
+  Let us now use the if then else condition
+  isavailable = true;
+
+  &lt;div&gt;
+      &lt;span *ngIf="isavailable; then condition1 else condition2"&gt;Condition is valid.&lt;/span&gt;
+      &lt;ng-template #condition1&gt;Condition is valid&lt;/ng-template&gt;
+      &lt;ng-template #condition2&gt;Condition is invalid&lt;/ng-template&gt;
+  &lt;/div&gt;
+</pre>
+<h4>Style Binding & NgStyle</h4>
+<h5>Bind a single style value</h5>
+<pre>
+&lt;p [style.background-color]="'darkorchid'"&gt;
+    Quite something!
+&lt;/p&gt;
+</pre>
+<div class="output">
+    <p [style.background-color]="'darkorchid'">
+        Quite something!
+    </p>
+</div>
+<hr>
+<h5>Modifying the unit, here for example we set the unit in em, but px, %</h5>
+<pre>
+&lt;p [style.font-size.em]="'3'"&gt;
+A paragraph at 3em!
+&lt;/p&gt;
+</pre>
+<div class="output">
+    <p [style.font-size.em]="'3'">
+        A paragraph at 3em!
+    </p>
+    <hr>
+    <h5>Conditionally setting a style value depending on a property of the component</h5>
+    <pre>
+      isImportant: boolean = true;
+      isNotImportant: boolean = false;
+
+    &lt;p [style.font-size.px]="isImportant ? '30' : '16'"&gt;
+    Some text that may be important.
+    &lt;/p&gt;
+    
+    &lt;p [style.font-size.px]="isNotImportant ? '30' : '16'"&gt;
+    Some text that may be not important.
+    &lt;/p&gt;
+    </pre>
+    <div class="output">
+        <p [style.font-size.px]="isImportant ? '30' : '16'">
+            Some text that may be important.
+        </p>
+        <p [style.font-size.px]="isNotImportant ? '30' : '16'">
+            Some text that may be not important.
+        </p>
+    </div>
+    <hr>
+
+
+    <h5>NgStyle for multiple values</h5>
+
+myStyles would be a property in the component that contains an object with css property names as the keys
+<pre>
+&lt;p [ngStyle]="myStyles"&gt;
+You say tomato, I say tomato
+&lt;/p&gt;
+
+myStyles = {{'{'}}
+'background-color': 'lime',
+'font-size': '20px',
+'font-weight': 'bold'
+{{'}'}}
+</pre>
+<div class="output">
+    <p [ngStyle]="myStyles">
+        You say tomato, I say tomato
+    </p>
+  </div>
+
+Also it could be provided inline like this:
+<pre>
+&lt;p [ngStyle]="{{'{'}}'background-color': 'lime',
+'font-size': '20px',
+'font-weight': 'bold'{{'}'}}"&gt;
+You say tomato, I say tomato
+&lt;/p&gt;
+</pre>
+<div class="output">
+    <p [ngStyle]="{'background-color': 'lime',
+    'font-size': '20px',
+    'font-weight': 'bold'}">
+    You say tomato, I say tomato
+    </p>
+  </div>
+
+Or the object can be the return value of a method:
+<pre>
+&lt;p [ngStyle]="setMyStyles()"&gt;
+You say tomato, I say tomato
+&lt;/p&gt;
+
+variableOne: boolean = true;
+variableTwo: boolean = true;
+
+setMyStyles() {{'{'}}
+let styles = {{'{'}}
+'background-color': this.variableOne ? 'red' : 'transparent',
+'font-weight': this.variableTwo ? 'bold' : 'normal'
+{{'}'}};
+return styles;
+{{'}'}}
+</pre>
+<div class="output">
+    <p [ngStyle]="setMyStyles()">
+        You say tomato, I say tomato
+    </p>
+</div>
+    <hr>
+    <h1>Tryout 3</h1>
+    <hr>
+    <h4>Event & Property Binding Exerscise</h4><br>
+    <h4>Creating our Calculator UI</h4>
+    <pre>
+      <b>> HTML</b>
+      
+      &lt;div class="calculator"&gt;
+      &lt;input type="text" class="calculator-screen" value="0" disabled /&gt;
+      &lt;div class="calculator-keys"&gt;
+    
+        &lt;button type="button" class="operator" value="+"&gt;+&lt;/button&gt;
+        &lt;button type="button" class="operator" value="-"&gt;-&lt;/button&gt;
+        &lt;button type="button" class="operator" value="*"&gt;&times;&lt;/button&gt;
+        &lt;button type="button" class="operator" value="/"&gt;&divide;&lt;/button&gt;
+    
+        &lt;button type="button" value="7"&gt;7&lt;/button&gt;
+        &lt;button type="button" value="8"&gt;8&lt;/button&gt;
+        &lt;button type="button" value="9"&gt;9&lt;/button&gt;
+    
+    
+        &lt;button type="button" value="4"&gt;4&lt;/button&gt;
+        &lt;button type="button" value="5"&gt;5&lt;/button&gt;
+        &lt;button type="button" value="6"&gt;6&lt;/button&gt;
+    
+    
+        &lt;button type="button" value="1"&gt;1&lt;/button&gt;
+        &lt;button type="button" value="2"&gt;2&lt;/button&gt;
+        &lt;button type="button" value="3"&gt;3&lt;/button&gt;
+    
+    
+        &lt;button type="button" value="0"&gt;0&lt;/button&gt;
+        &lt;button type="button" class="decimal" value="."&gt;.&lt;/button&gt;
+        &lt;button type="button" class="all-clear" value="all-clear"&gt;AC&lt;/button&gt;
+    
+        &lt;button type="button" class="equal-sign" value="="&gt;=&lt;/button&gt;
+    
+      &lt;/div&gt;
+      &lt;/div&gt;
+
+    </pre>
+    <div class="output">
+  
+        <div class="">
+            <input type="text" class="" value="0" disabled />
+            <div class="">
+          
+              <button type="button" class="operator" value="+">+</button>
+              <button type="button" class="operator" value="-">-</button>
+              <button type="button" class="operator" value="*">&times;</button>
+              <button type="button" class="operator" value="/">&divide;</button>
+          
+              <button type="button" value="7">7</button>
+              <button type="button" value="8">8</button>
+              <button type="button" value="9">9</button>
+          
+          
+              <button type="button" value="4">4</button>
+              <button type="button" value="5">5</button>
+              <button type="button" value="6">6</button>
+          
+          
+              <button type="button" value="1">1</button>
+              <button type="button" value="2">2</button>
+              <button type="button" value="3">3</button>
+          
+          
+              <button type="button" value="0">0</button>
+              <button type="button" class="" value=".">.</button>
+              <button type="button" class="" value="all-clear">AC</button>
+          
+              <button type="button" class="" value="=">=</button>
+          
+            </div>
+      </div>
+    </div>
+<pre>
+<b>> CSS</b>
+
+.calculator {{'{'}}
+border: 1px solid #ccc;
+border-radius: 5px;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 400px;
+{{'}'}}
+
+.calculator-screen {{'{'}}
+width: 100%;
+font-size: 5rem;
+height: 80px;
+border: none;
+background-color: #252525;
+color: #fff;
+text-align: right;
+padding-right: 20px;
+padding-left: 10px;
+{{'}'}}
+
+button {{'{'}}
+height: 60px;
+background-color: #fff;
+border-radius: 3px;
+border: 1px solid #c4c4c4;
+background-color: transparent;
+font-size: 2rem;
+color: #333;
+background-image: linear-gradient(to bottom,transparent,transparent 50%,rgba(0,0,0,.04));
+box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 1px 0 0 rgba(255,255,255,.45), inset 0 -1px 0 0 rgba(255,255,255,.15), 0 1px 0 0 rgba(255,255,255,.15);
+text-shadow: 0 1px rgba(255,255,255,.4);
+{{'}'}}
+
+button:hover {{'{'}}
+background-color: #eaeaea;
+{{'}'}}
+
+.operator {{'{'}}
+color: #337cac;
+{{'}'}}
+
+.all-clear {{'{'}}
+background-color: #f0595f;
+border-color: #b0353a;
+color: #fff;
+{{'}'}}
+
+.all-clear:hover {{'{'}}
+background-color: #f17377;
+{{'}'}}
+
+.equal-sign {{'{'}}
+background-color: #2e86c0;
+border-color: #337cac;
+color: #fff;
+height: 100%;
+grid-area: 2 / 4 / 6 / 5;
+{{'}'}}
+
+.equal-sign:hover {{'{'}}
+background-color: #4e9ed4;
+{{'}'}}
+
+.calculator-keys {{'{'}}
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+grid-gap: 20px;
+padding: 20px;
+{{'}'}}
+</pre>
+<div class="output">
+    <div class="calculator">
+        <input type="text" class="calculator-screen" value="0" disabled />
+        <div class="calculator-keys">
+      
+          <button type="button" class="operator" value="+">+</button>
+          <button type="button" class="operator" value="-">-</button>
+          <button type="button" class="operator" value="*">×</button>
+          <button type="button" class="operator" value="/">÷</button>
+      
+          <button type="button" value="7">7</button>
+          <button type="button" value="8">8</button>
+          <button type="button" value="9">9</button>
+      
+      
+          <button type="button" value="4">4</button>
+          <button type="button" value="5">5</button>
+          <button type="button" value="6">6</button>
+      
+      
+          <button type="button" value="1">1</button>
+          <button type="button" value="2">2</button>
+          <button type="button" value="3">3</button>
+      
+      
+          <button type="button" value="0">0</button>
+          <button type="button" class="decimal" value=".">.</button>
+          <button type="button" class="all-clear" value="all-clear">AC</button>
+      
+          <button type="button" class="equal-sign" value="=">=</button>
+      
+        </div>
+        </div>
+        <h6>Summary</h6>
+  <p>
+     <b>Interpolation:</b> Data flows from the component to the DOM - It's used to display the value of a component member variable in the associated template. We use curly braces for interpolation. <br>
+
+     <b>Property binding:</b> Data flows from the component to a property of an element in the DOM. It's used to bind a component member variable to an attribute of a DOM such as the value attribue of an &lt;input&gt; tag (For example: <b>&lt;input type="text" [value]="foobar"&gt;</b>). We use brackets for property binding. <br>
+      
+     <b>Event binding:</b> Data flows from the DOM to the component. When a DOM event, such as a click, is triggered, the bound method from the component is called. For example: <b>&lt;button (click)="sayHi()"&gt;Hi&lt;/button&gt;</b> - The sayHi() method will be called so it needs to be defined in the component class. We use parentheses for event binding. <br>
+      
+     <b>Two-way data binding:</b> Data flows both ways. For example: <b>&lt;input type="text" [(ngModel)]="foobar"&gt;</b> (The foobar variable needs to be defined in the component). The input element and foobar will have the same value and when one changes, the other one changes to the same value accordingly. We use the banana in the box syntax which combines brackets and parentheses for two-way data binding. ngModel is a special directive that binds to the value attribute of the &lt;input&gt; and &lt;textarea&gt; elements but you can constrcut two-way data binding for any property in the DOM or component. Two-way data binding = property binding + event binding.
+  </p>
+  <hr>
+  <h4>
+    Binding  properties and events with your calculator app
+  </h4>
+  <pre style="background-color: white;">
+
+      We need to get the value of the number or the type of the operation when the user clicks on the corresponding DOM element,
+      calculate the result and display it in the results element.
+
+      In the template, we have four sets of keys:
+      
+      digits (0-9),
+      operators (+, -, *, /, =),
+      a decimal point (.)
+      and a reset key.
+
+      Let's see how we can use Angular to listen for clicks on the calculator and determine what type of key was pressed.
+
+  </pre>
+  <pre>
+    <b>> component.ts</b>
+
+  currentNumber = '0';
+  firstOperand = null;
+  operator = null;
+  waitForSecondNumber = false;
+
+The <code>currentNumber</code> variable holds the string that will be displayed in the result input element.<br>
+The <code>firstOperand</code> variable holds the value of the first operand of the operation.<br>
+The <code>operator</code> variable holds the operation.<br>
+The <code>waitForSecondNumber</code> variable holds a boolean value 
+indicating if the user has finished typing the first operand and ready to enter the second operand of the operation.<br>
+Next, define the <code>getNumber()</code> method that will be used to get the current number:
+
+public getNumber(v: string){{'{'}}
+  console.log(v);
+  if(this.waitForSecondNumber)
+  {{'{'}}
+    this.currentNumber = v;
+    this.waitForSecondNumber = false;
+  {{'}'}}else{{'{'}}
+    this.currentNumber === '0'? this.currentNumber = v: this.currentNumber += v;
+  
+  {{'}'}}
+{{'}'}}
+
+Next, define the <code>getDecimal()</code> method which appends the decimal point to the current number:
+
+getDecimal(){{'{'}}
+  if(!this.currentNumber.includes('.')){{'{'}}
+      this.currentNumber += '.'; 
+  {{'}'}}
+{{'}'}}
+
+
+Next, define the <code>doCalculation()</code> method which performs the calculation depending on the operator type:
+
+private doCalculation(op , secondOp){{'{'}}
+  switch (op){{'{'}}
+        case '+':
+        return this.firstOperand += secondOp; 
+        case '-': 
+        return this.firstOperand -= secondOp; 
+        case '*': 
+        return this.firstOperand *= secondOp; 
+        case '/': 
+        return this.firstOperand /= secondOp; 
+        case '=':
+        return secondOp;
+  {{'}'}}
+{{'}'}}
+
+Next, define the <code>getOperation()</code> that will be used to get the performed operation:
+
+public getOperation(op: string){{'{'}}
+        console.log(op);  
+
+  if(this.firstOperand === null){{'{'}}
+        this.firstOperand = Number(this.currentNumber);
+  {{'}'}}else if(this.operator){{'{'}}
+        const result = this.doCalculation(this.operator , Number(this.currentNumber))
+        this.currentNumber = String(result);
+        this.firstOperand = result;
+  {{'}'}}
+  this.operator = op;
+  this.waitForSecondNumber = true;
+  console.log(this.firstOperand);
+{{'}'}}
+
+Finally, define the <code>clear()</code> method that will be used to clear the result area and reset the calculations:
+
+public clear(){{'{'}}
+  this.currentNumber = '0';
+  this.firstOperand = null;
+  this.operator = null;
+  this.waitForSecondNumber = false;
+{{'}'}}
+  </pre>
+</div>
+<hr>
+<h4>Property Binding</h4>
+<p>We have defined variables and methods in the component. Now, we'll need to bind them to the template.</p>
+<p>Let's start with the <code>currentNumber</code> variable which holds the value of the currently typed number.<br>
+Let's use property binding to bind currentNumber to the <b>value attribute</b> of the &lt;input&gt; element as follows:</p>
+We use brackets around the <b>value attribute</b> to create a <b>property binding</b>
+<pre><br>
+    &lt;input type="text" class="calculator-screen" [value]="currentNumber" disabled /&gt;<br>
+</pre>
+<div class="output">
+    <input type="text" class="calculator-screen" [value]="currentNumber" disabled />
+</div>
+<p>
+    Now, our current number will be displayed in our calculator and when the value of the currentNumber variable changes, the displayed value will change accordingly without having to manually add any code to update the DOM.
+</p>
+<hr>
+<p>Next, when a digit button is clicked we need to call the <code>getNumber()</code> method to append the digit to the current number string. For this, we can use Angular event binding to bind the <code>getNumber()</code> method to the <code>click</code> event of buttons displaying the digits.<br> We use the parentheses around the click event to create an event binding. Change your component template as follows:</p>
+<pre>
+    &lt;button type="button" (click) = "getNumber('7')" value="7"&gt;7&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('8')" value="8"&gt;8&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('9')" value="9"&gt;9&lt;/button&gt;
+    
+    &lt;button type="button" (click) = "getNumber('4')" value="4"&gt;4&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('5')" value="5"&gt;5&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('6')" value="6"&gt;6&lt;/button&gt;
+    
+    &lt;button type="button" (click) = "getNumber('1')" value="1"&gt;1&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('2')" value="2"&gt;2&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('3')" value="3"&gt;3&lt;/button&gt;
+    &lt;button type="button" (click) = "getNumber('0')" value="0"&gt;0&lt;/button&gt;
+</pre>
+<div class="output">
+    <div class="calculator">
+        <input type="text" class="calculator-screen" value="0"  [value]="currentNumber" disabled />
+        <div class="calculator-keys">
+      
+          <button type="button" class="operator" value="+">+</button>
+          <button type="button" class="operator" value="-">-</button>
+          <button type="button" class="operator" value="*">×</button>
+          <button type="button" class="operator" value="/">÷</button>
+      
+          <button type="button" (click) = "getNumber('7')" value="7">7</button>
+          <button type="button" (click) = "getNumber('8')" value="8">8</button>
+          <button type="button" (click) = "getNumber('9')" value="9">9</button>
+      
+      
+          <button type="button" (click) = "getNumber('4')" value="4">4</button>
+          <button type="button" (click) = "getNumber('5')" value="5">5</button>
+          <button type="button" (click) = "getNumber('6')" value="6">6</button>
+      
+      
+          <button type="button" (click) = "getNumber('1')" value="1">1</button>
+          <button type="button" (click) = "getNumber('2')" value="2">2</button>
+          <button type="button" (click) = "getNumber('3')" value="3">3</button>
+      
+      
+          <button type="button" (click) = "getNumber('0')" value="0">0</button>
+          <button type="button" class="decimal" value=".">.</button>
+          <button type="button" class="all-clear" value="all-clear">AC</button>
+      
+          <button type="button" class="equal-sign" value="=">=</button>
+        </div>
+</div>
+</div>
+<hr>
+<p>
+    Next, let's bind the <code>getOperation()</code>, <code>getDecimal()</code> and <code>clear()</code> methods to the click event of their respective buttons:
+</p>
+<pre>
+    &lt;button type="button" (click) = "getOperation('+')" class="operator" value="+"&gt;+&lt;/button&gt;
+    &lt;button type="button" (click) = "getOperation('-')" class="operator" value="-"&gt;-&lt;/button&gt;
+    &lt;button type="button" (click) = "getOperation('*')" class="operator" value="*"&gt;&times;&lt;/button&gt;
+    &lt;button type="button" (click) = "getOperation('/')" class="operator" value="/"&gt;&divide;&lt;/button&gt;
+    
+    &lt;!-- [...] --&gt;
+    
+    &lt;button type="button" (click) = "getDecimal()" class="decimal" value="."&gt;.&lt;/button&gt;
+    &lt;button type="button" (click) = "clear()"  class="all-clear" value="all-clear"&gt;AC&lt;/button&gt;
+    
+    &lt;button type="button" (click) = "getOperation('=')" class="equal-sign" value="="&gt;=&lt;/button&gt;
+</pre>
+<div class="output">
+    <div class="calculator">
+        <input type="text" class="calculator-screen" value="0"  [value]="currentNumber" disabled />
+        <div class="calculator-keys">
+      
+            <button type="button" (click) = "getOperation('+')" class="operator" value="+">+</button>
+            <button type="button" (click) = "getOperation('-')" class="operator" value="-">-</button>
+            <button type="button" (click) = "getOperation('*')" class="operator" value="*">&times;</button>
+            <button type="button" (click) = "getOperation('/')" class="operator" value="/">&divide;</button>
+      
+          <button type="button" (click) = "getNumber('7')" value="7">7</button>
+          <button type="button" (click) = "getNumber('8')" value="8">8</button>
+          <button type="button" (click) = "getNumber('9')" value="9">9</button>
+      
+      
+          <button type="button" (click) = "getNumber('4')" value="4">4</button>
+          <button type="button" (click) = "getNumber('5')" value="5">5</button>
+          <button type="button" (click) = "getNumber('6')" value="6">6</button>
+      
+      
+          <button type="button" (click) = "getNumber('1')" value="1">1</button>
+          <button type="button" (click) = "getNumber('2')" value="2">2</button>
+          <button type="button" (click) = "getNumber('3')" value="3">3</button>
+      
+      
+          <button type="button" (click) = "getNumber('0')" value="0">0</button>
+          <button type="button" (click) = "getDecimal()" class="decimal" value=".">.</button>
+          <button type="button" (click) = "clear()"  class="all-clear" value="all-clear">AC</button>
+          <button type="button" (click) = "getOperation('=')" class="equal-sign" value="=">=</button>
+        </div>
+</div>
+</div>
+
+
+</div>

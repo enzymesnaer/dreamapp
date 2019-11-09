@@ -1,0 +1,399 @@
+<div class="text-left"><hr>
+    <h1>Tryout1 </h1>
+    Angular 8 Forms are used to handle the user’s input. We can use Angular form in our application to enable users to log in, update profiles, enter information, and to perform many other data-entry tasks.
+The web app uses forms to enable the users to log in, to update a profile, to enter sensitive information, and to perform many data-entry tasks.
+Angular provides two different approaches for managing the user input through the forms.
+<ul>
+    <li>Reactive approach</li>
+    <li>Template-driven approach</li>
+</ul>
+Both reactive and template-driven forms share underlying standard building blocks, which are the following.
+<ul>
+    <li><b>FormControl</b>: It tracks the value and validation status of the individual form control.</li>
+    <li><b>FormGroup</b>: It tracks the same values and status for the collection of form controls.</li>
+    <li><b>FormArray</b>: It tracks the same values and status for the array of the form controls.</li>
+    <li><b>ControlValueAccessor</b>: It creates a bridge between Angular FormControl instances and native DOM elements.</li>
+</ul><hr>
+<h4>Reactive Forms</h4>
+Reactive forms or Model-driven forms are more robust, scalable, reusable, and testable. 
+If forms are the key part of your application, or you’re already using reactive patterns for building your web application, use reactive forms.
+In Reactive Forms, most of the work is done in the component class.<hr>
+
+<h4>Angular Template-driven Forms</h4>
+Template-driven forms are useful for adding the simple form to an app, such as the email list signup form. They’re easy to add to a web app, but they don’t scale as well as the reactive forms.
+If you have the requirement of basic form and logic that can be managed solely in the template, use template-driven forms.
+In template-driven forms, most of the work is done in the template.
+<hr>
+
+Example of Template-driven form in Angular,
+Go to an <b>app.module.ts</b> file and add the following code.
+
+<pre>
+import {{'{'}} BrowserModule {{'}'}} from '@angular/platform-browser';
+import {{'{'}} NgModule {{'}'}} from '@angular/core';
+import {{'{'}} FormsModule {{'}'}} from '@angular/forms';
+import {{'{'}} AppComponent {{'}'}} from './app.component';
+
+@NgModule({{'{'}}
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+  {{'}'}})
+export class AppModule {{'{'}} {{'}'}}
+</pre>
+In the above file, we have imported the FormsModule from the @angular/forms library.
+Now, we can use the FormsModule inside our app.component.ts file.
+
+<pre>
+<b>app.component.ts</b><hr>
+import {{'{'}} Component, OnInit {{'}'}} from '@angular/core';
+@Component({{'{'}}
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+  {{'}'}})
+export class AppComponent implements OnInit {{'{'}}
+   constructor() {{'{'}} {{'}'}}
+   ngOnInit() {{'{'}}
+   {{'}'}}
+   onClickSubmit(formData) {{'{'}}
+      alert('Your Email is : ' + formData.email);
+    {{'}'}}
+{{'}'}}
+</pre>
+HTML Code
+<pre>
+    &lt;form #login = "ngForm" (ngSubmit) = "onClickSubmit(login.value)"&gt;
+    &lt;input type = "text" name = "email" placeholder = "email" ngModel &gt;
+        &lt;br/&gt;
+        &lt;input type = "password" name = "pwd" placeholder = "password" ngModel &gt;
+        &lt;br/&gt;
+        &lt;input type = "submit" value = "submit"&gt;
+      &lt;/form &gt;
+</pre>
+<p>In the template-driven forms, we need to create a model form controls by adding the ngModel directive and the name attribute.
+    Thus, whenever we want Angular to access our data from forms, add ngModel to that tag, as shown above. Now, if we have to read an email and password, we need to add a ngModel across it.
+    If you closely look at the form, we have also added the ngForm to the #login. The ngForm directive needs to be added to a form template that we have created.
+    At last, we have also added the function onClickSubmit and assigned login.value to it.</p>
+    <form #login = "ngForm" (ngSubmit) = "onClickSubmit(login.value)">
+        <input class="form-control" tabindex="1" type = "text" name = "email" placeholder = "email" ngModel >
+        <br/>
+        <input class="form-control" type = "password" name = "pwd" placeholder = "password" ngModel >
+        <br/>
+        <input class="btn btn-primary" type = "submit" value = "submit">
+    </form >
+<hr>
+<h4>Model-driven or Reactive Forms in Angular</h4>
+In the model-driven form, we need to import a ReactiveFormsModule from @angular/forms and use the same in the imports array.
+<hr>
+Modify <b>app.module.ts</b> accordingly
+<pre>
+<b>>app.module.ts</b>
+
+import {{'{'}} BrowserModule {{'}'}} from '@angular/platform-browser';
+import {{'{'}} NgModule {{'}'}} from '@angular/core';
+import {{'{'}} FormsModule, ReactiveFormsModule {{'}'}} from '@angular/forms';
+
+import {{'{'}} AppComponent {{'}'}} from './app.component';
+
+@NgModule({{'{'}}
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+  {{'}'}})
+export class AppModule {{'{'}} {{'}'}}
+</pre>
+<pre class="next">
+    In your <b>component.ts</b> file, we need to import the few modules for the model-driven form. 
+    For example, import {{'{'}} FormGroup, FormBuilder {{'}'}} from ‘@angular/forms’.
+</pre><hr>
+<h5>Forms controls and form groups in Angular</h5>
+<p>
+    Form controls are classes that can hold both the data values and the validation information of any form element, which means to say a form control should bind every form input you have in a reactive form. They are the basic units that make up reactive forms.
+</p>
+<p>
+    Form groups are constructs that wrap a collection of form controls. Just as the control gives you access to the state of an element, the group gives the same access, but to the state of the wrapped controls. Every single form control in the form group is identified by name when initializing.
+</p>
+<p>
+    The app component defines the form fields and validators for our registration form using an Angular FormBuilder to create an instance of a FormGroup that is stored in the angForm property.
+    The angForm is then bound to the form in the app template below using the [formGroup] directive.
+</p>
+<pre>
+><b>component.ts</b>
+
+import {{'{'}} Component, OnInit {{'}'}} from '@angular/core';
+import {{'{'}} FormGroup, FormBuilder {{'}'}} from '@angular/forms';
+@Component({{'{'}}
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+  {{'}'}})
+export class AppComponent implements OnInit {{'{'}}
+  angForm: FormGroup;
+  constructor(private fb: FormBuilder) {{'{'}}
+    this.createForm();
+    {{'}'}}
+  createForm() {{'{'}}
+    this.angForm = this.fb.group({{'{'}}
+      email: [''],
+      password: ['']
+    });
+    {{'}'}}
+  onClickSubmit(email, password) {{'{'}}
+    alert('Your Email is : ' + email);
+    {{'}'}}
+   ngOnInit() {{'{'}}
+   {{'}'}}
+{{'}'}}
+</pre>
+<p>
+    In the above code, we have used a FormBuilder to create a form and initialize the value of two fields, which is empty. To register the form builder in a component, the first thing to do is import it from Angular forms.
+    The next step is to inject the form builder service, which is an injectable provider that comes with the reactive forms module. You can then use the form builder after injecting it. 
+    We have also defined one function called onClickSubmit(), which accepts the two-parameter email and password.
+    Form builders not only help to make your reactive forms’ code efficient, but they are also important for form validation.
+</p>
+<h5>Reactive Forms Validation App Template</h5>
+<p>
+The form element uses the <b>[formGroup] directive</b> to bind to the <b>angForm FormGroup</b> in the app component above.<br>
+We have defined the submit button click event on the button markup.<br>
+When the user clicks on the submit button, the onClickSubmit() function will be called from the app component with the value of email and password as parameters to the function.<br>
+You can also define the form submit event to the onSubmit() handler in the app component using the Angular event binding (ngSubmit)=”onSubmit()”.
+</p>
+<pre>
+<b>>component.html</b> 
+&lt;form [formGroup]="angForm"&gt;
+        &lt;input type = "text" 
+              name = "email" 
+              placeholder = "email" 
+              formControlName="email" 
+              #email&gt;
+        &lt;br/&gt;
+        &lt;input type = "password" 
+              name = "pwd" 
+              placeholder = "password" 
+              formControlName="password" 
+              #password&gt;
+        &lt;br/&gt;
+        &lt;input type = "submit" 
+              value = "submit" 
+              (click) = "onClickSubmit2(email.value, password.value)" &gt;
+&lt;/form&gt;   
+</pre>
+<form [formGroup]="angForm">
+        <input class="form-control" type = "text" 
+              name = "email" 
+              placeholder = "email" 
+              formControlName="email" 
+              #email>
+        <br/>
+        <input class="form-control" type = "password" 
+              name = "pwd" 
+              placeholder = "password" 
+              formControlName="password" 
+              #password>
+        <br/>
+        <input class="btn btn-primary" type = "submit" 
+                value = "submit" 
+                (click) = "onClickSubmit2(email.value, password.value)" >
+</form>
+</div>
+<hr>
+<h1>Tryout2</h1>
+<hr>
+<div class="text-left">
+  In template-driven we add attributes to html field tags in the respective component's html file. eg. required, minlength, pattern...
+<pre class="next">
+    For model driven (Class Driven)
+    Import Modules(Super Classes) first in your module.ts file
+    In your <b>component.ts</b> file, we need to import the few sub modules for the model-driven form. 
+    For example, import {{'{'}} FormGroup, FormBuilder, Validators {{'}'}} from ‘@angular/forms’.
+</pre><hr>
+<ol>
+    <li> Add imports</li>
+    <li> Design the structure in your component.ts</li>
+    <li>  Add validators to  your form structure</li>
+</ol>
+<br>
+<hr>
+<pre>
+> component.ts
+
+import {{'{'}} FormGroup, FormBuilder, Validators {{'}'}} from '@angular/forms';
+export class ExformsComponent implements OnInit {{'{'}}
+  submitted: boolean;
+  userForm: FormGroup;
+
+  constructor(public formBuilder: FormBuilder) {{'{'}} {{'}'}}
+  ngOnInit() {{'{'}}
+    this.userForm = this.formBuilder.group({{'{'}}
+      username: [ '' ,  [Validators.required, Validators.pattern(/^[A-Za-z0-9_@.]*$/), Validators.maxLength(50)] ],
+      password: [ '' ,   [Validators.required, Validators.minLength(8)]]
+      {{'}'}});
+  {{'}'}}
+  public myhasError = (controlName:string, errorName:string) =>{{'{'}}
+    return this.userForm.controls[controlName].hasError(errorName); //hasError is predefined in angular
+  {{'}'}}
+  onSubmit() {{'{'}}
+    this.submitted = true;
+    if(this.userForm.invalid){{'{'}}  // stop here if form is invalid
+      return;
+    {{'}'}}
+    alert ("Welcome => "+this.userForm.controls['username'].value);
+  {{'}'}}
+{{'}'}}
+</pre>
+<hr>
+<pre>
+&lt;div class="row"&gt;
+    &lt;div class="col-md-6"&gt;
+        &lt;form [formGroup]="userForm" (ngSubmit)="onSubmit()" autocomplete="off"&gt;
+          &lt;div class="form-group"&gt;
+              &lt;label for=""&gt;Username&lt;/label&gt;
+              &lt;input placeholder="Enter username" class="form-control" formControlName="username" tabindex="1" autofocus="autofocus" autocomplete="off"&gt;
+              &lt;p class="txt-danger" *ngIf="submitted && myhasError('username', 'required')"&gt;Username is required&lt;/p&gt;
+              &lt;p class="txt-danger" *ngIf="submitted && myhasError('username', 'pattern')"&gt;Special characters are not allowed&lt;/p&gt;
+              &lt;p class="txt-danger" *ngIf="submitted && myhasError('username', 'maxlength')"&gt;Username lengthth cannot be more than 50&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class="form-group"&gt;
+              &lt;label for=""&gt;Password&lt;/label&gt;
+              &lt;input type="password"  placeholder="Enter Password" class="form-control" formControlName="password" autocomplete="off" &gt;
+              &lt;p class="txt-danger" *ngIf="submitted && myhasError('password', 'required')"&gt;Password is required&lt;/p&gt;
+              &lt;p class="txt-danger" *ngIf="submitted && myhasError('password', 'minlength')"&gt;Password minimum length is 8&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;button class="btn btn-primary"&gt;Verify and Proceed&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<div class="row">
+    <div class="col-md-6">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" autocomplete="off">
+            <div class="form-group">
+                <label for="">Username</label>
+                <input placeholder="Enter username" class="form-control" formControlName="username" tabindex="1" autofocus="autofocus" autocomplete="off">
+                <p class="txt-danger" *ngIf="submitted && myhasError('username', 'required')">Username is required</p>
+                <p class="txt-danger" *ngIf="submitted && myhasError('username', 'pattern')">Special characters are not allowed</p>
+                <p class="txt-danger" *ngIf="submitted && myhasError('username', 'maxlength')">Username lenth cannot be more than 50</p>
+            </div>
+            <div class="form-group">
+                <label for="">Password</label>
+                <input type="password" tabindex="2"   placeholder="Enter Password" class="form-control" formControlName="password" autocomplete="off" >
+                <p class="txt-danger" *ngIf="submitted && myhasError('password', 'required')">Password is required</p>
+                <p class="txt-danger" *ngIf="submitted && myhasError('password', 'minlength')">Password minimum length is 8</p>
+            </div>
+            <button class="btn btn-primary">Verify and Proceed</button>
+        </form>
+    </div>
+</div>
+<hr>
+<h1>Tryout 3</h1>
+<hr>
+<h3>Dynamic fields using form arrays</h3>
+<p>
+    So you have a form and would like to add form fields dynamically from a response to a user event? It’s easy to do with Reactive Forms and FormArray. FormArray is a bit like FormGroup and it’s used in a very similar way, the difference being that it’s used as an array that wraps around an arbitrary amount of FormControl, FormGroup or even other FormArray instances.
+</p>
+<pre>
+<b>Importing the FormArray</b>
+import {{'{'}} FormBuilder, FormGroup, FormArray {{'}'}} from '@angular/forms';
+</pre>
+<h4>Initializing the form</h4>
+<p>Now we’ll initialize our form using FormBuilder in the ngOnInit hook. For this example we’ll create an order form that allows the user to add new items dynamically:</p>
+<pre>
+    orderForm: FormGroup;
+    items: FormArray;
+    
+    constructor(private formBuilder: FormBuilder) {{'{'}}   {{'}'}}
+    
+    ngOnInit() {{'{'}}
+      this.orderForm = this.formBuilder.group({{'{'}}
+        customerName: '',
+        email: '',
+        items: this.formBuilder.array([ this.createItem() ])
+      {{'}'}});
+    {{'}'}}
+</pre>
+<p>
+    Our items instance is a form array instead of a form control, and we’re calling a createItem method to create a form group as the first item in our array. Here’s what our createItem method looks like:
+</p>
+<pre>
+    createItem(): FormGroup {{'{'}}
+      return this.formBuilder.group({{'{'}}
+        name: '',
+        description: '',
+        price: ''
+      {{'}'}});
+    {{'}'}}
+</pre>
+<h4>Adding to the FormArray Dynamically</h4>
+<p>
+    Now the interesting part is that we can to treat our FormArray just like a regular array and push new items into it:<br>
+    It’s as simple as calling our addItem method in our template when the user clicks to add a new item.
+</p>
+<pre>
+    addItem(): void {{'{'}}
+      this.items = this.orderForm.get('items') as FormArray;
+      this.items.push(this.createItem());
+    {{'}'}}
+</pre>
+<h4>FormArray in the Template</h4>
+<p>
+    Finally, we use the formArrayName directive in the template to bind to our form array:<br>
+    Our formGroupName directives now takes an index instead of a name and we set it using the index that ngFor gives us.
+</p>
+<pre>
+    &lt;div formArrayName="items"
+    *ngFor="let item of orderForm.get('items').controls; let i = index;"&gt;
+    &lt;div [formGroupName]="i"&gt;
+      &lt;input formControlName="name" placeholder="Item name"&gt;
+      &lt;input formControlName="description" placeholder="Item description"&gt;
+      &lt;input formControlName="price" placeholder="Item price"&gt;
+    &lt;/div&gt;
+  
+    Chosen name: {{'{'}}{{'{'}} orderForm.controls.items.controls[i].controls.name.value {{'}'}}{{'}'}}
+</pre>
+<form [formGroup]="orderForm">
+    <div formArrayName="items" *ngFor="let item of orderForm.get('items').controls; let i = index;">
+        <div [formGroupName]="i">
+            <input class="form-control" formControlName="name" placeholder="Item name">
+            <input class="form-control" formControlName="description" placeholder="Item description">
+            <input class="form-control" formControlName="price" placeholder="Item price">
+        </div>
+
+        Chosen name: {{orderForm.controls.items.controls[i].controls.name.value}}
+    </div>
+    <button class="btn btn-primary" (click)="addItem()">Add</button>
+</form>
+
+Http
+<hr>
+json placeholeder typecode
+<br>
+import  httpclientmidule from @ ang/commo/http <br>
+ng g s typi <br>
+typi.service.ts <br>
+
+import httpclient  from @ <br>
+
+constructore (publice: .......) <br>
+
+public URL ="http....jasonplaceholder.typecode.com/" <br>
+fetchusers() in braces return this.http.get(this.urls+'users')
+<h3></h3>
+<h3></h3>
+<h3></h3>
+
+</div>
